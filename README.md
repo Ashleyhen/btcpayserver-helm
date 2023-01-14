@@ -40,7 +40,7 @@ To view local deployment run
 
 ### current sturture
 
-::: mermaid
+```mermaid
 flowchart LR
     bitcoin-core -->|rpc:18443|id1(c-lightning rpc:11001)
-:::
+```
