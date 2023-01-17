@@ -16,6 +16,7 @@ export const deployment = new k8s.apps.v1.Deployment("bitcoind", {
                         { containerPort:18444 },
                         { containerPort:28334 },
                         { containerPort:28335 },
+                        { containerPort:28336 },
                     ],
                     env:[ {
                         name:"BITCOIN_EXTRA_ARGS",
