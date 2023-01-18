@@ -81,6 +81,12 @@ export const btcServerDeployment = new k8s.apps.v1.Deployment("bitcoinserver", {
 						}, {
 							name:"BTCPAY_BTCEXPLORERURL",
 							value:"http://127.0.0.1:32838/"
+						}, {
+							name:"BTCPAY_LAUNCHSETTINGS", 
+							value:"true"
+						}, {
+							name:"BTCPAY_HOST",
+							value:"btcpay.local"
 						}
 					],
 					}],
