@@ -6,29 +6,44 @@ services:
     restart: always
     image: btcpayserver/bitcoin:24.0.1-1
     ports:
-      - "18443:18443"
-      - "18444:18444"
+      - 18443:18443
+      - 18444:18444
+      - 18445:18445
+    
     environment:
       BITCOIN_NETWORK: regtest
       BITCOIN_EXTRA_ARGS: |
-        rpcbind=bitcoind:18443
+        server=1
+        debug=1
+        rpcbind=bitcoind
+        rpcport=18443
+        rpcauth=foo:7d9ba5ae63c3d4dc30583ff4fe65a67e$$9e3634e81c11659e3de036d0bf88f89cd169c1039e6e09607562d54765c649cc
+        rpcallowip=172.22.0.2/16
+    
     volumes:
     - "bitcoind_data:/data"
 
   nbxplorer:
     container_name: nbxplorer
     restart: always
-    # image: "nicolasdorier/nbxplorer:2.3.57"
-    image: "nicolasdorier/nbxplorer:2.1.10"
+    image: "nicolasdorier/nbxplorer:2.3.57"
+    # image: "nicolasdorier/nbxplorer:2.1.10"
     expose:
       - "32838"
     environment:
-      NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest} 
+      NBXPLORER_NETWORK: regtest 
       NBXPLORER_BIND: 0.0.0.0:32838
       NBXPLORER_CHAINS: btc
       NBXPLORER_SIGNALFILEDIR: /datadir
-      NBXPLORER_BTCRPCURL: http://bitcoind:18443
+      NBXPLORER_BTCRPCURL: bitcoind:18443
       NBXPLORER_BTCNODEENDPOINT: bitcoind:18444
+      NBXPLORER_BTCRPCUSER: foo
+      NBXPLORER_POSTGRES: User ID=postgres;Application Name=btcpayserverregtest;Include Error Detail=true;Host=postgres;Port=5432;
+      NBXPLORER_BTCRPCPASSWORD: qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0=
+
+# postgres=User ID=btcpay;Password=urpassword;Application Name=btcpayserver;Host=localhost;Port=5432;Database=btcpay;
+
+      # DbPassword: qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0=
       # NBXPLORER_POSTGRES: User ID=postgres;Application Name=payserverdb;Include Error Detail=true;Host=localhost;Port=5432
     command: --noauth
     
@@ -68,13 +83,14 @@ services:
   postgres:
     container_name: postgres
     restart: always
-    # image: postgres:latest
-    image: postgres:9.6.5
+    image: postgres:latest
+    # image: postgres:9.6.5
     expose:
       - "5432"
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust,
-          
+      # POSTGRES_PASSWORD: password
+      
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
       
@@ -105,29 +121,29 @@ services:
         - "torrc_data:/usr/local/etc/tor"
 
 #  docker run -p 8069:8069 --name odoo --link db:db -t odoo
-  odoo:
-    container_name: odoo
-    restart: always
-    image: odoo:latest
-    ports:
-      - "8069:8069"
-    links:
-      - db
+#   odoo:
+#     container_name: odoo
+#     restart: always
+#     image: odoo:latest
+#     ports:
+#       - "8069:8069"
+#     links:
+#       - db
 
- # docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=postgres --name db postgres:13
+#  # docker run -d -e POSTGRES_USER=odoo -e POSTGRES_PASSWORD=odoo -e POSTGRES_DB=postgres --name db postgres:13
 
-  db:
-    container_name: db
-    restart: always
-    image: postgres:13
-    # image: postgres:9.6.5
-    environment:
-      POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: odoo
-      POSTGRES_DB: postgres
+#   db:
+#     container_name: db
+#     restart: always
+#     image: postgres:13
+#     # image: postgres:9.6.5
+#     environment:
+#       POSTGRES_USER: odoo
+#       POSTGRES_PASSWORD: odoo
+#       POSTGRES_DB: postgres
 
-    expose:
-      - "5432"
+#     expose:
+#       - "5432"
    
     
 volumes:
