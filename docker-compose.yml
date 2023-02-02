@@ -56,11 +56,11 @@ services:
   btcpay:
     container_name: btcpay
     restart: always
-    # image: "btcpayserver/btcpayserver:1.7.5"
+    image: "btcpayserver/btcpayserver:1.7.5"
 
-    image: "btcpayserver/btcpayserver:1.0.3.118"
+    # image: "btcpayserver/btcpayserver:1.0.3.118"
     environment:
-      BTCPAY_PSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserverregtest
+      BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserverregtest
       BTCPAY_NETWORK: regtest
       BTCPAY_ROOTPATH: /
       BTCPAY_CHAINS: btc
@@ -97,8 +97,8 @@ services:
   tor: 
     container_name: tor
     restart: always
-    # image: btcpayserver/tor:0.4.7.10
-    image: btcpayserver/tor:0.3.5.8
+    image: btcpayserver/tor:0.4.7.10
+    # image: btcpayserver/tor:0.3.5.8
     expose:
       - "9050"
     environment:
