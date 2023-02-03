@@ -1,46 +1,20 @@
 # Bitcoin Payserver manual set up
 
-## Goal
+To start the bitcoin server run the following commands:
 
- Have a repository with the required configurations needed a btc server in kubernets.
+`docker-compose up -d`
 
- what we have
+Open up a browser that is running tor such as brave. The command below will print out the tor hostname:
 
-- bitcoind
-- lightningd
+` cat /var/lib/docker/volumes/btc-pay-server_torservice_data/_data/BTCPayServer/hostname`
 
- high prority
+Copy the output and past it in the url. The page may take a minute to load but you should see the btcpay home page once the page is loaded.
 
-- bitpay server
+## Current issues:
 
- medium prority
+- still need to configure a lightning node for btcpay
+- When you start this up, you'll be running a new blockchain without any coins that have been mined. In order to use this you'll have to mine some coins. 
+- NBxplorer has a btc indexer error that reads:   `NBXplorer.Indexer.BTC: Error connecting to RPC server The 'bitcoind' scheme is not supported.`
+- There isn't any security configured yet
 
-- connect to tour for enhanced
-
-## Running the application
-
- requirements
-
-- node
-- minikube
-- kubeclt
-- pulumi
-
-### Deploying to kubernetes
-
-```bash
- pulumi up
-```
-
-To view local deployment run
-
-```bash
- kubectl get deployments
-```
-
-### current sturture
-
-```mermaid
-flowchart LR
-    bitcoin-core -->|rpc:18443|id1(c-lightning rpc:11001)
-```
+<!-- /var/lib/docker/volumes/btc-pay-server_torservice_data/_data/BTCPayServer/hostname -->
