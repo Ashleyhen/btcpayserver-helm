@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 2.1.52
+dependencies:
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.1.12
+description: A Helm chart for Kubernetes
+name: nbxplorer
+type: application
+version: 0.1.5
