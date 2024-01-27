@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "btcpayserver.fullname" . }}
+  labels:
+    {{- include "btcpayserver.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "btcpayserver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "btcpayserver.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "btcpayserver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: 
+          # - "/bin/sh"
+          # - "-c"
+          # - "apt update && apt install iputils-ping && sleep 2000 && ./BTCPayServer --network=regtest --postgres=postgresql://postgres:bKn6V8fqYl@postgresql:5432/btcpayserver"
+          # args: 
+          # - "--network=regtest"
+          # - "--postgres=postgresql://postgres:bKn6V8fqYl@postgresql:5432/btcpayserver" 
+          env:
+            - name: BTCPAY_POSTGRES
+              value: 'User ID=postgres;Password=bKn6V8fqYl;Include Error Detail=true;Host=postgresql;Port=5432;Database=btcpayserver'
+            - name: BTCPAY_NETWORK
+              value: "regtest"
+            - name: BTCPAY_EXPLORERPOSTGRES
+              value: "User ID=postgres;Password=bKn6V8fqYl;Include Error Detail=true;Host=postgresql;Port=5432;Database=nbxplorer"
+            - name: BTCPAY_BTCEXPLORERURL
+              value: "http://nbxplorer:32838"
+            - name: BTCPAY_BTCEXTERNALLNDREST
+              value: "type=lnd-rest;server=http://lnd-internal:8080/;allowinsecure=true"
+            - name: BTCPAY_VERBOSE
+              value: "true"
+            - name: BTCPAY_DEBUGLOG
+              value: "debug.log"
+            - name: BTCPAY_ALLOW-ADMIN-REGISTRATION 
+              value: "true"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,221 @@
+# Default values for btcpayserver.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: btcpayserver/btcpayserver
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.12.4"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 23002
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+bitcoin-core:
+  service:
+    ports:
+      rpc: 43782
+      p2p: 39388
+      testnetPort: 28332
+      testnetP2pPort: 28333
+  persistence:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    #
+  config: |
+    server=1
+    txindex=1
+
+    # chain=main
+    # chain=test
+    chain=regtest
+    # chain=signet
+
+    rpcserialversion=0
+    rpcuser=ceiwHEbqWI83
+    rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    
+    [regtest]
+    debug=rpc
+    rpcallowip=0.0.0.0/0
+    rpcbind=0.0.0.0
+
+    dbcache=75
+    maxorphantx=10
+    maxmempool=150
+    nodebuglogfile=1
+    zmqpubrawblock=tcp://0.0.0.0:28332
+    zmqpubrawtx=tcp://0.0.0.0:28333
+    deprecatedrpc=signrawtransaction
+    fallbackfee=0.0002
+    rpcport=43782
+
+
+lnd:
+  configurationFile:
+    lnd.conf: |-
+      restlisten=0.0.0.0:8080
+      rpclisten=127.0.0.1:10008
+      bitcoin.node=bitcoind
+      bitcoin.active=1
+      bitcoin.regtest=1
+      bitcoind.rpchost=btcpayserver-bitcoin-core-0:43782
+      bitcoind.rpcuser=ceiwHEbqWI83
+      bitcoind.rpcpass=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+      bitcoind.zmqpubrawblock=tcp://btcpayserver-bitcoin-core-0:28332
+      bitcoind.zmqpubrawtx=tcp://btcpayserver-bitcoin-core-0:28333
+      bitcoin.defaultchanconfs=1
+      debuglevel=debug
+      trickledelay=1000
+  internalServices:
+    rpc: 10009
+    rest: 8080
+
+  # Ports that are visible outside your cluster
+  externalServices:
+    p2p: 9735
+  persistence:
+    size: 1Gi
+
+nbxplorer:
+  nameOverride: nbxplorer
+  fullnameOverride: nbxplorer
+  nbxplorer:
+    network: regtest
+    chain: btc
+    rpcurl: http://btcpayserver-bitcoin-core-0:43782/
+    nodeEndpoint: btcpayserver-bitcoin-core-0:39388
+    btcrpcuser: ceiwHEbqWI83
+    btcrpcpassword: XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+  config:
+    rpcauth: ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    # rpcauth: ceiwHEbqWI83:c731ff9f92e00ee8d75b951067987186$43a6467e245a67c8b2bad71cbe74005a0594935ad1a2dd27dcd8f54f5477be77
+  service:
+    type: ClusterIP
+    port: 32838
+  persistence:
+    size: 1Gi
+
+postgresql:
+  auth:
+    username: "btcpayadmin"
+  ## @param auth.password Password for the custom user to create. Ignored if `auth.existingSecret` is provided
+  ##
+    password: "p@ssw0rd!"
+  ## @param auth.database Name for a custom database to create
+  ##
+  primary:
+    initdb: 
+      user: btcpayadmin
+      password: p@ssw0rd!
+      database: testDB
+      scripts:
+        my_init_script.sh: |
+          #!/bin/sh
+          echo "executing script"
+        my_script.sql: |
+          CREATE DATABASE nbxplorer; 
+          CREATE DATABASE btcpayserver;
+    persistence:
+      size: 1Gi
+  readReplicas:
+    persistence:
+      size: 1Gi
+  image:
+    debug: true
+  
