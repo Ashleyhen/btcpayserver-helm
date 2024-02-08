@@ -1,0 +1,18 @@
+{{- if not .Values.existingSecretForConfig -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "btcpayserver.fullname" . }}
+  labels: {{- include "btcpayserver.labels" . | nindent 4 }}
+    app.kubernetes.io/component: btcpayserver
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- range $key, $value := .Values.env }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end -}}
+{{- end -}}

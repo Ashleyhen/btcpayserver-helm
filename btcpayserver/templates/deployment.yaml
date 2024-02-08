@@ -36,35 +36,9 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # command: 
-          # - "/bin/sh"
-          # - "-c"
-          # - "apt update && apt install iputils-ping && sleep 2000 && ./BTCPayServer --network=regtest --postgres=postgresql://postgres:bKn6V8fqYl@postgresql:5432/btcpayserver"
-          args:
-            - "-b 0.0.0.0" 
-          # - "--network=regtest"
-          # - "--postgres=postgresql://postgres:bKn6V8fqYl@postgresql:5432/btcpayserver" 
-          env:
-            - name: BTCPAY_POSTGRES
-              value: 'User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver'
-            - name: BTCPAY_NETWORK
-              value: "regtest"
-            - name: BTCPAY_EXPLORERPOSTGRES
-              value: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
-            - name: BTCPAY_BTCEXPLORERURL
-              value: "http://nbxplorer:32838"
-            - name: BTCPAY_BTCEXTERNALLNDREST
-              value: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
-            - name: BTCPAY_VERBOSE
-              value: "true"
-            - name: BTCPAY_DEBUGLOG
-              value: "debug.log"
-            - name: ASPNETCORE_URLS
-              value: "http://*:23002"
-              # name: BTCPAY_PORT
-              # value: 80
-            - name: BTCPAY_ALLOW-ADMIN-REGISTRATION 
-              value: "true"
+          envFrom:
+          - configMapRef:
+              name: {{ template "btcpayserver.fullname" . }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
