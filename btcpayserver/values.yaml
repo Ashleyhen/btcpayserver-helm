@@ -31,6 +31,11 @@ podLabels: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+commonAnnotations: {}
 securityContext: {}
   # capabilities:
   #   drop:
@@ -103,9 +108,19 @@ volumeMounts: []
 nodeSelector: {}
 
 tolerations: []
-
 affinity: {}
 
+env:  
+  BTCPAY_NETWORK: 'regtest'
+  BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
+  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
+  BTCPAY_BTCEXPLORERURL: "http://nbxplorer:32838"
+  BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
+  BTCPAY_VERBOSE: "true"
+  BTCPAY_DEBUGLOG: "debug.log"
+  ASPNETCORE_URLS: "http://*:23002"
+  BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
+  
 bitcoin-core:
   service:
     ports:
