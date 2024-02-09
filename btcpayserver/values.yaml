@@ -162,6 +162,10 @@ bitcoin-core:
 
 
 lnd:
+  loop:
+    enable: false
+  pool:
+    enable: false
   configurationFile:
     lnd.conf: |-
       restlisten=0.0.0.0:8080
@@ -209,11 +213,7 @@ nbxplorer:
 postgresql:
   auth:
     username: "btcpayadmin"
-  ## @param auth.password Password for the custom user to create. Ignored if `auth.existingSecret` is provided
-  ##
     password: "p@ssw0rd!"
-  ## @param auth.database Name for a custom database to create
-  ##
   primary:
     initdb: 
       user: btcpayadmin
