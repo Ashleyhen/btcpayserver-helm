@@ -51,6 +51,10 @@ The first time you run this application make sure you start minikube:
 
 `minikube start`
 
+To build the dependency run: 
+
+`helm dependency build`
+
 To run the project locally simply run:
 
 `helm install btcpayserver btcpayserver`

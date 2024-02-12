@@ -104,12 +104,9 @@ volumeMounts: []
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
-
 nodeSelector: {}
-
 tolerations: []
 affinity: {}
-
 env:  
   BTCPAY_NETWORK: 'regtest'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
@@ -135,21 +132,17 @@ bitcoin-core:
   config: |
     server=1
     txindex=1
-
     # chain=main
     # chain=test
     chain=regtest
     # chain=signet
-
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-    
     [regtest]
     debug=rpc
     rpcallowip=0.0.0.0/0
     rpcbind=0.0.0.0
-
     dbcache=75
     maxorphantx=10
     maxmempool=150
@@ -184,7 +177,6 @@ lnd:
   internalServices:
     rpc: 10009
     rest: 8080
-
   # Ports that are visible outside your cluster
   externalServices:
     p2p: 9735
@@ -233,4 +225,19 @@ postgresql:
       size: 1Gi
   image:
     debug: true
-  
+
+nginx:
+  # custom-values.yaml
+  serverBlock: |
+    server {
+        listen 80;
+        server_name _;
+
+        location / {
+            proxy_pass http://10.98.182.112:23002;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
