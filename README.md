@@ -90,7 +90,7 @@ Currently the only environment that is being supported is **regtest**
 
 ## Accessing the kuberenetes dashboard for monitoring locally 
 
-To access the dashboard locally follow the steps above but instead go to dashboard 
+To access the [kuberenetes dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) locally follow the steps above but instead go to dashboard 
 
     echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/dashboard" 
  
