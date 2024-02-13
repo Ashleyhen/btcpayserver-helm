@@ -63,6 +63,35 @@ To deploy the project create a kubeconfig file then run:
 
 ` helm install btcpayserver btcpayserver --kubeconfig=./path-to-kubeconfig.yaml `
 
-view the pods, services and the persistence volume claim by running
+View the pods, services and the persistence volume claim by running
 
 `kubectl get po, svc, pvc`
+
+There are 3 different environments:
+* regtest
+* testnet
+* mainnet 
+
+Currently the only environment that is being supported is **regtest**
+
+## Logging into btcpayserver locally:
+
+1. Enable LoadBalaning on minikube run 
+
+    `minikube tunnel` 
+
+2. Get the EXTERNAL-IP for **btcpayserver-nginx** 
+
+    `kubectl get svc` or `kubectl get svc | grep btcpayserver-nginx | awk '{print $3}'`
+
+3. You should beable to login by running the following command and going to the site. The command should print out something that looks like _http://10.110.218.162/regtest_
+
+    `echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/regtest"` 
+
+## Accessing the kuberenetes dashboard for monitoring locally 
+
+To access the dashboard locally follow the steps above but instead go to dashboard 
+
+    echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/dashboard" 
+ 
+    
