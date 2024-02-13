@@ -234,12 +234,23 @@ nginx:
         listen 0.0.0.0:8080;
         server_name _;
             
-        location / {
-            proxy_set_header Host $host;
-            proxy_pass http://btcpayserver:23002;
+        location /regtest/ {
+          proxy_set_header Host $host;
+          rewrite ^/regtest/(.*)$ /$1 break;  # Remove the /regtest part of the URI
+          proxy_pass http://btcpayserver:23002;  # Pass the request to the backend
         }
 
-      location /test {
-          return 200 "nginx connection works";
+        location /test {
+            return 200 "nginx connection works";
+          }
+
+        location /dashboard {
+          proxy_set_header Host $host;
+          rewrite ^/dashboard/(.*)$ /$1 break;  # Remove the /regtest part of the URI
+          proxy_pass https://kubernetes-dashboard.kubernetes-dashboard.svc.cluster.local;
         }
+        
       }
+
+  # nginx: 
+    # enabled: false
