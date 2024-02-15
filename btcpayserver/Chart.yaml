@@ -40,12 +40,12 @@ dependencies:
 - name: bitcoin-core 
   version: 2.0.2
   repository:  https://charts.hiro.so/hirosystems
-  condition: include-bitcoin-core.enabled
+  # condition: include-bitcoin-core.enabled
 
-- name: fulcrum 
-  version: 0.5.1
-  repository:  https://raw.githubusercontent.com/GaloyMoney/charts/gh-pages
-  condition: include-fulcrum.enabled
+# - name: fulcrum 
+#   version: 0.5.1
+#   repository:  https://raw.githubusercontent.com/GaloyMoney/charts/gh-pages
+#   condition: include-fulcrum.enabled
 
 
 

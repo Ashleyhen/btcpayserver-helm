@@ -1,5 +1,40 @@
 
 # helm repo add galoymoney https://raw.githubusercontent.com/GaloyMoney/charts/gh-pages
 # helm install my-fulcrum galoymoney/fulcrum --version 0.5.1
-include-fulcrum.enabled:
-  enabled: false
+
+
+bitcoin-core:
+  service:
+    ports:
+      rpc: 43782
+      p2p: 39388
+      testnetPort: 28332
+      testnetP2pPort: 28333
+  persistence:
+    accessMode: ReadWriteOnce
+    size: 8Gi
+    #
+  config: |
+    server=1
+    txindex=1
+    testnet=1
+    rpcserialversion=0
+    rpcuser=ceiwHEbqWI83
+    rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+
+    [testnet]
+    blockfilterindex=1
+    peerblockfilters=1
+    debug=rpc
+    rpcallowip=0.0.0.0/0
+    rpcbind=0.0.0.0
+    dbcache=75
+    maxorphantx=10
+    maxmempool=150
+    nodebuglogfile=1
+    zmqpubrawblock=tcp://0.0.0.0:28332
+    zmqpubrawtx=tcp://0.0.0.0:28333
+    deprecatedrpc=signrawtransaction
+    fallbackfee=0.0002
+    rpcport=43782
+

@@ -1,7 +1,3 @@
-include-bitcoin-core:
-  enabled: true
-include-fulcrum.enabled:
-  enabled: false
 env:  
   BTCPAY_NETWORK: 'regtest'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
@@ -27,10 +23,7 @@ bitcoin-core:
   config: |
     server=1
     txindex=1
-    # chain=main
-    # chain=test
     chain=regtest
-    # chain=signet
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
