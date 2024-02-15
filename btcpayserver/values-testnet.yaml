@@ -1,0 +1,5 @@
+
+# helm repo add galoymoney https://raw.githubusercontent.com/GaloyMoney/charts/gh-pages
+# helm install my-fulcrum galoymoney/fulcrum --version 0.5.1
+include-fulcrum.enabled:
+  enabled: false

@@ -1,3 +1,7 @@
+include-bitcoin-core:
+  enabled: true
+include-fulcrum.enabled:
+  enabled: false
 env:  
   BTCPAY_NETWORK: 'regtest'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
