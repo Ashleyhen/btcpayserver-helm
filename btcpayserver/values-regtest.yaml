@@ -73,8 +73,6 @@ lnd:
     size: 1Gi
 
 nbxplorer:
-  nameOverride: nbxplorer
-  fullnameOverride: nbxplorer
   nbxplorer:
     network: regtest
     chain: btc

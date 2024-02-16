@@ -28,6 +28,7 @@ bitcoin-core:
     debug=rpc
     rpcallowip=0.0.0.0/0
     rpcbind=0.0.0.0
+    prune=550
     dbcache=75
     maxorphantx=10
     maxmempool=150
