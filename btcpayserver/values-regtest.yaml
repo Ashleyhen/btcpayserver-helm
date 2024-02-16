@@ -73,20 +73,25 @@ lnd:
     size: 1Gi
 
 nbxplorer:
-  nbxplorer:
-    network: regtest
-    chain: btc
-    rpcurl: http://btcpayserver-bitcoin-core-0:43782/
-    nodeEndpoint: btcpayserver-bitcoin-core-0:39388
-    btcrpcuser: ceiwHEbqWI83
-    btcrpcpassword: XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-  config:
-    rpcauth: ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
   service:
     type: ClusterIP
     port: 32838
   persistence:
     size: 1Gi
+  settingsConfig: |
+    bind=0.0.0.0:32838
+    network=regtest
+    chains=btc
+    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782
+    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
+    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    rmquser="rabbituser"
+    rmqpass=""
+    rmqhost=nbxplorer-rabbitmq
+    rmqvirtual=/
+    rmqtranex=NewTransaction
+    rmqblockex=NetBlock
+
 
 postgresql:
   auth:

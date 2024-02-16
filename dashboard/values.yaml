@@ -120,6 +120,12 @@ nginx:
           proxy_pass http://btcpayserver.regtest.svc.cluster.local:23002;  # Pass the request to the backend
         }
 
+        location /testnet {
+          proxy_set_header Host $host;
+          rewrite ^/testnet/(.*)$ /$1 break;  # Remove the /regtest part of the URI
+          proxy_pass http://btcpayserver.testnet.svc.cluster.local:23002;  # Pass the request to the backend
+        }
+
         location /test {
             return 200 "nginx connection works";
           }
