@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nbxplorer.fullname" . }}
+  labels:
+    {{- include "nbxplorer.labels" . | nindent 4 }}
+data:
+  settings.config: |
+    {{- .Values.settingsConfig | nindent 4 }}

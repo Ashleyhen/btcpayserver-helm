@@ -57,41 +57,50 @@ To build the dependency run:
 
 To run the project locally simply run:
 
-`helm install btcpayserver btcpayserver`
+` helm install btcpayserver btcpayserver -f  btcpayserver/values-regtest.yaml --namespace regtest `
+
+To delete the project run:
+
+` helm delete btcpayserver --namespace regtest `
 
 To deploy the project create a kubeconfig file then run:
 
-` helm install btcpayserver btcpayserver --kubeconfig=./path-to-kubeconfig.yaml `
+` helm --kubeconfig=./path-to-kubeconfig.yaml install btcpayserver btcpayserver -f  btcpayserver/values-regtest.yaml --namespace regtest `
 
 View the pods, services and the persistence volume claim by running
 
-`kubectl get po, svc, pvc`
+` kubectl get po, svc, pvc --namespace regtest `
 
 There are 3 different environments:
+
 * regtest
 * testnet
-* mainnet 
+* mainnet
 
-Currently the only environment that is being supported is **regtest**
+Currently the only environment that isn't being supported is **mainnet**
 
 ## Logging into btcpayserver locally:
 
-1. Enable LoadBalaning on minikube run 
+1. Enable LoadBalaning on minikube run
 
-    `minikube tunnel` 
+    `minikube tunnel`
 
-2. Get the EXTERNAL-IP for **btcpayserver-nginx** 
+2. Get the EXTERNAL-IP for **btcpayserver-nginx**
 
-    `kubectl get svc` or `kubectl get svc | grep btcpayserver-nginx | awk '{print $3}'`
+    `kubectl get svc` or `kubectl get svc`
 
-3. You should beable to login by running the following command and going to the site. The command should print out something that looks like _http://10.110.218.162/regtest_
+3. You should beable to login by grabbing the ip address from the following command and going to the site. The command should print out something that looks like _http://10.110.218.162/login_
 
-    `echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/regtest"` 
+    `curl "http://$(kubectl get svc --namespace regtest | grep "23002" | awk '{print$3}'):23002/login"` 
 
-## Accessing the kuberenetes dashboard for monitoring locally 
+## Accessing the kuberenetes dashboard for monitoring locally
 
 To access the [kuberenetes dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) locally follow the steps above but instead go to dashboard 
 
-    echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/dashboard" 
- 
-    
+```bash
+echo "http://$(kubectl get svc | grep btcpayserver-nginx | awk '{print $3}')/dashboard"
+``` 
+or 
+```bash
+chromium-browser "http://$(kubectl get svc --namespace regtest | grep "23002" | awk '{print$3}'):23002/login"
+```
