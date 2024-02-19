@@ -116,24 +116,14 @@ nginx:
             
         location /regtest {
           proxy_set_header Host $host;
-          rewrite ^/regtest/(.*)$ /$1 break;  # Remove the /regtest part of the URI
+          proxy_redirect http://btcpayserver.regtest.svc.cluster.local:23002/regtest http://btcpayserver.regtest.svc.cluster.local:23002;
           proxy_pass http://btcpayserver.regtest.svc.cluster.local:23002;  # Pass the request to the backend
         }
 
-        location /testnet {
-          proxy_set_header Host $host;
-          rewrite ^/testnet/(.*)$ /$1 break;  # Remove the /regtest part of the URI
-          proxy_pass http://btcpayserver.testnet.svc.cluster.local:23002;  # Pass the request to the backend
-        }
-
+        
         location /test {
             return 200 "nginx connection works";
           }
 
-        location /dashboard {
-          proxy_set_header Host $host;
-          rewrite ^/dashboard/(.*)$ /$1 break;  # Remove the /regtest part of the URI
-          proxy_pass https://kubernetes-dashboard;
-        }
         
       }
