@@ -68,7 +68,7 @@ nbxplorer:
     type: ClusterIP
     port: 32838
   persistence:
-    size: 1Gi
+    size: 8Gi
   settingsConfig: |
     bind=0.0.0.0:32838
     network=testnet
@@ -82,6 +82,7 @@ nbxplorer:
     rmqvirtual=/
     rmqtranex=NewTransaction
     rmqblockex=NetBlock
+    noauth=true
 
 postgresql:
   auth:
@@ -111,7 +112,7 @@ env:
   BTCPAY_NETWORK: 'testnet'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
   BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
-  BTCPAY_BTCEXPLORERURL: "http://nbxplorer:32838"
+  BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
   BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
   BTCPAY_VERBOSE: "true"
   BTCPAY_DEBUGLOG: "debug.log"
