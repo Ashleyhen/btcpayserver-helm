@@ -7,7 +7,7 @@ bitcoin-core:
       testnetP2pPort: 28333
   persistence:
     accessMode: ReadWriteOnce
-    size: 8Gi
+    size: 64Gi
     #
   config: |
     server=1
