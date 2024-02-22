@@ -117,3 +117,7 @@ kube-prometheus-stack:
       type: LoadBalancer  # Use ClusterIP for internal exposure, you'll use Ingress for external access
       port: 3000
       targetPort: 3000
+  prometheus:
+    service:
+      type: LoadBalancer
+
