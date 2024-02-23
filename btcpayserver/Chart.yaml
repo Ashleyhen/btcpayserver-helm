@@ -41,6 +41,3 @@ dependencies:
   version: 2.0.2
   repository:  https://charts.hiro.so/hirosystems
   
-
-# helm repo add galoymoney https://raw.githubusercontent.com/GaloyMoney/charts/gh-pages # helm install my-fulcrum galoymoney/fulcrum --version 0.5.1
-  

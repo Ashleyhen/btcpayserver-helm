@@ -46,6 +46,12 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
+          livenessProbe:
+            httpGet:
+              path: /  
+              port: 23002      
+            initialDelaySeconds: 30  
+            periodSeconds: 30        
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}

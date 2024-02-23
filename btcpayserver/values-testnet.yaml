@@ -64,6 +64,9 @@ lnd:
     size: 1Gi
 
 nbxplorer:
+  rabbitmq:
+    persistence:
+      size: 16Gi
   service:
     type: ClusterIP
     port: 32838
@@ -100,6 +103,7 @@ postgresql:
         my_script.sql: |
           CREATE DATABASE nbxplorer; 
           CREATE DATABASE btcpayserver;
+          CREATE DATABASE wallets_balances;
     persistence:
       size: 1Gi
   readReplicas:
