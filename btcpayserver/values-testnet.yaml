@@ -11,13 +11,14 @@ bitcoin-core:
     #
   config: |
     server=1
-    txindex=1
     testnet=1
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    whitelist=127.0.0.1
+    whitebind=0.0.0.0:39388
 
-    [testnet]
+    [test]
     blockfilterindex=1
     peerblockfilters=1
     debug=rpc
