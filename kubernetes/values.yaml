@@ -1,14 +1,14 @@
-# Default values for metrics.
+# Default values for btcpayserver.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: btcpayserver/btcpayserver
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "1.12.4"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -31,6 +31,11 @@ podLabels: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+commonAnnotations: {}
 securityContext: {}
   # capabilities:
   #   drop:
@@ -38,16 +43,10 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-server:
-  service:
-    annotations: {}
 
 service:
-  type: ClusterIP
-  port: 80
-
-minReadySeconds: 10
-
+  type: LoadBalancer
+  port: 23002
 
 ingress:
   enabled: false
@@ -105,19 +104,7 @@ volumeMounts: []
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
-kube-prometheus-stack:
-  grafana:
-    service:
-      type: LoadBalancer  # Use ClusterIP for internal exposure, you'll use Ingress for external access
-      port: 3000
-      targetPort: 3000
-  prometheus:
-    service:
-      type: LoadBalancer
 
