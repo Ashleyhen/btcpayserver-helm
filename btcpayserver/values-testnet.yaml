@@ -7,17 +7,18 @@ bitcoin-core:
       testnetP2pPort: 28333
   persistence:
     accessMode: ReadWriteOnce
-    size: 8Gi
+    size: 64Gi
     #
   config: |
     server=1
-    txindex=1
     testnet=1
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    whitelist=127.0.0.1
+    whitebind=0.0.0.0:39388
 
-    [testnet]
+    [test]
     blockfilterindex=1
     peerblockfilters=1
     debug=rpc
@@ -64,6 +65,9 @@ lnd:
     size: 1Gi
 
 nbxplorer:
+  rabbitmq:
+    persistence:
+      size: 16Gi
   service:
     type: ClusterIP
     port: 32838
@@ -94,12 +98,13 @@ postgresql:
       password: p@ssw0rd!
       database: testDB
       scripts:
-        my_init_script.sh: |
-          #!/bin/sh
-          echo "executing script"
         my_script.sql: |
           CREATE DATABASE nbxplorer; 
           CREATE DATABASE btcpayserver;
+          CREATE DATABASE wallets;
+        my_init_script.sh: |
+          #!/bin/sh
+          echo "executing script"
     persistence:
       size: 1Gi
   readReplicas:
@@ -111,7 +116,7 @@ postgresql:
 env:  
   BTCPAY_NETWORK: 'testnet'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
-  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
+  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
   BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
   BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
   BTCPAY_VERBOSE: "true"
