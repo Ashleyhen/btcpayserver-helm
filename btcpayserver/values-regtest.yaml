@@ -14,8 +14,14 @@ bitcoin-core:
     ports:
       rpc: 43782
       p2p: 39388
-      testnetPort: 28332
-      testnetP2pPort: 28333
+    extraPorts:
+      - name: zmqpubrawblock 
+        port: 28332
+        targetPort:  28332
+      - name: zmqpubrawtx
+        port: 28333
+        targetPort: 28333
+
   persistence:
     accessMode: ReadWriteOnce
     size: 1Gi
@@ -51,7 +57,7 @@ lnd:
   configurationFile:
     lnd.conf: |-
       restlisten=0.0.0.0:8080
-      rpclisten=127.0.0.1:10008
+      rpclisten=127.0.0.1:10009
       bitcoin.node=bitcoind
       bitcoin.active=1
       bitcoin.regtest=1
@@ -64,11 +70,11 @@ lnd:
       debuglevel=debug
       trickledelay=1000
   internalServices:
-    rpc: 10009
-    rest: 8080
+    rpcPort: 10009
+    restPort: 8080
   # Ports that are visible outside your cluster
   externalServices:
-    p2p: 9735
+    p2pPort: 9735
   persistence:
     size: 1Gi
 

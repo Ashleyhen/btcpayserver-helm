@@ -27,7 +27,7 @@ dependencies:
 
 - name: lnd 
   version: 0.3.15
-  repository: https://charts.foldapp.com
+  repository: file://charts/lnd
   
 - name: postgresql 
   version: 13.4.3

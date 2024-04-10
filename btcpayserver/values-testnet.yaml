@@ -3,8 +3,14 @@ bitcoin-core:
     ports:
       rpc: 43782
       p2p: 39388
-      testnetPort: 28332
-      testnetP2pPort: 28333
+    extraPorts:
+      - name: zmqpubrawblock 
+        port: 28332
+        targetPort:  28332
+      - name: zmqpubrawtx
+        port: 28333
+        targetPort: 28333
+ 
   persistence:
     accessMode: ReadWriteOnce
     size: 64Gi
@@ -42,9 +48,8 @@ lnd:
     enable: false
   configurationFile:
     lnd.conf: |-
-      restlisten=0.0.0.0:8080
-      rpclisten=0.0.0.0:10008
       bitcoin.node=bitcoind
+      accept-amp=1
       bitcoin.active=1
       bitcoin.testnet=1
       bitcoind.rpchost=btcpayserver-bitcoin-core-0:43782
@@ -55,12 +60,14 @@ lnd:
       bitcoin.defaultchanconfs=1
       debuglevel=debug
       trickledelay=1000
+      rpclisten=0.0.0.0:10009
+      restlisten=0.0.0.0:8080
   internalServices:
-    rpc: 10009
-    rest: 8080
+    rpcPort: 10009
+    restPort: 8080
   # Ports that are visible outside your cluster
   externalServices:
-    p2p: 9735
+    p2pPort: 9735
   persistence:
     size: 1Gi
 
@@ -87,6 +94,7 @@ nbxplorer:
     rmqtranex=NewTransaction
     rmqblockex=NetBlock
     noauth=true
+
 
 postgresql:
   auth:
@@ -116,10 +124,15 @@ postgresql:
 env:  
   BTCPAY_NETWORK: 'testnet'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
-  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
+  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
   BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
   BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
   BTCPAY_VERBOSE: "true"
   BTCPAY_DEBUGLOG: "debug.log"
   ASPNETCORE_URLS: "http://*:23002"
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
+  BTCPAYGEN_LIGHTNING: 'lnd'
+
+
+
+
