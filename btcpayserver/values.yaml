@@ -108,3 +108,4 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+initScript: ""

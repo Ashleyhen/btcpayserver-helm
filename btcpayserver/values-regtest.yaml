@@ -1,14 +1,3 @@
-env:  
-  BTCPAY_NETWORK: 'regtest'
-  BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
-  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
-  BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
-  BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
-  BTCPAY_VERBOSE: "true"
-  BTCPAY_DEBUGLOG: "debug.log"
-  ASPNETCORE_URLS: "http://*:23002"
-  BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
-  
 bitcoin-core:
   service:
     ports:
@@ -25,7 +14,7 @@ bitcoin-core:
   persistence:
     accessMode: ReadWriteOnce
     size: 1Gi
-    #
+
   config: |
     server=1
     txindex=1
@@ -33,6 +22,8 @@ bitcoin-core:
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    whitelist=127.0.0.1
+    whitebind=0.0.0.0:39388
 
     [regtest]
     debug=rpc
@@ -47,6 +38,8 @@ bitcoin-core:
     deprecatedrpc=signrawtransaction
     fallbackfee=0.0002
     rpcport=43782
+    rpclisten=0.0.0.0:10009
+    restlisten=0.0.0.0:8080
 
 
 lnd:
@@ -97,12 +90,12 @@ nbxplorer:
     rmqvirtual=/
     rmqtranex=NewTransaction
     rmqblockex=NetBlock
-
+    noauth=true
 
 postgresql:
   auth:
-    username: "btcpayadmin"
-    password: "p@ssw0rd!"
+    username: btcpayadmin
+    password: p@ssw0rd!
   primary:
     initdb: 
       user: btcpayadmin
@@ -122,3 +115,45 @@ postgresql:
       size: 1Gi
   image:
     debug: true
+
+### btcpayserver section
+
+env:  
+  BTCPAY_NETWORK: 'regtest'
+  BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
+  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
+  BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
+  BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
+  BTCPAY_VERBOSE: "true"
+  BTCPAY_DEBUGLOG: "debug.log"
+  ASPNETCORE_URLS: "http://*:23002"
+  BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
+  
+initScript: | 
+  #!/bin/bash
+  apt update -y
+  apt upgrade -y
+  apt install curl -y
+  apt install jq -y  
+  export address='addr(bcrt1ppjj995khlhftanw7ak4zyzu3650rlmpfr9p4tafegw3u38h7vx4qnxemeg)'
+  export descriptor='addr(bcrt1ppjj995khlhftanw7ak4zyzu3650rlmpfr9p4tafegw3u38h7vx4qnxemeg)#hzc3j2sf'
+  export user=ceiwHEbqWI83 
+  export password=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+  export url=btcpayserver-bitcoin-core-0:43782
+
+  curl --user $user:$password \
+     --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"getdescriptorinfo\", \"params\": [\"$address\"]}" \
+     -H 'content-type: text/plain;' \
+     $url | jq
+
+  curl --user $user:$password --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"createwallet\", \"params\": [\"my_wallet\", true, false,\"\",false,true,true]}" -H 'content-type: text/plain;' $url | jq
+  curl --user $user:$password --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"importdescriptors\", \"params\": [[{\"desc\":\"$descriptor\",\"timestamp\":\"now\"}]]}" -H 'content-type: text/plain;' $url | jq
+  curl --user $user:$password --data-binary '{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"generatetodescriptor\", \"params\": '[50, $descriptor]'}'  -H 'content-type: text/plain;' $url  | jq
+
+  curl --user $user:$password \
+     --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"generatetodescriptor\", \"params\": [150, \"$descriptor\"]}" \
+     -H 'content-type: text/plain;' \
+     $url | jq
+
+
+  

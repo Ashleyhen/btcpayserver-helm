@@ -104,3 +104,4 @@ or
 ```bash
 chromium-browser "http://$(kubectl get svc --namespace regtest | grep "23002" | awk '{print$3}'):23002/login"
 ```
+<!-- docker run -d -p 5000:5000 --restart=always --name registry registry:2 -->

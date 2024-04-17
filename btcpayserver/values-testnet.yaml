@@ -109,7 +109,6 @@ postgresql:
         my_script.sql: |
           CREATE DATABASE nbxplorer; 
           CREATE DATABASE btcpayserver;
-          CREATE DATABASE wallets;
         my_init_script.sh: |
           #!/bin/sh
           echo "executing script"
@@ -132,6 +131,7 @@ env:
   ASPNETCORE_URLS: "http://*:23002"
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
   BTCPAYGEN_LIGHTNING: 'lnd'
+  BTCPAYGEN_ADDITIONAL_FRAGMENTS: "$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
 
 
 
