@@ -1,0 +1,12 @@
+FROM  rust:latest
+WORKDIR /app
+
+COPY target/release/starter ./ 
+RUN chmod +x starter   
+
+# Optionally, copy the binary to /usr/local/bin
+RUN cp ./starter /usr/local/bin/
+
+# Display the contents of the working directory
+ENTRYPOINT starter   
+ 
