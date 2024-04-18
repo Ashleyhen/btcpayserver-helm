@@ -88,7 +88,9 @@ nbxplorer:
     btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
     btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
     rmquser="rabbituser"
+    verbose=1
     rmqpass=""
+    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=postgres;Port=5432;Database=nbxplorer
     rmqhost=nbxplorer-rabbitmq
     rmqvirtual=/
     rmqtranex=NewTransaction

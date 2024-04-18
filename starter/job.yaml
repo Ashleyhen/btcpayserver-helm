@@ -7,7 +7,10 @@ spec:
     spec:
       containers:
       - name: my-job-container
-        image: localhost:5000/starter:latest
+        image: localhost:5000/starter:0
         args: 
         - --network=testnet
+        - --url=http://btcpayserver-bitcoin-core-0:43782
+        - --password=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+        - --user=ceiwHEbqWI83
       restartPolicy: Never

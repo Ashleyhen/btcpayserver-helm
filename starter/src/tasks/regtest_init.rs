@@ -17,6 +17,8 @@ pub fn regtest_generate_to_address(url: &str, user:&str,password:&str){
             ),
         )
         .unwrap();
+        
+        dbg!(client.get_index_info().unwrap());
 
         client.create_wallet(&address.to_string(), Some(true), None, None, Some(false)).unwrap();
         dbg!("created wallet successfully using address: {}", &address);

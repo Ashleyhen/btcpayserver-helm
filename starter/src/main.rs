@@ -1,5 +1,6 @@
-use std::str::FromStr;
+use std::{fs, str::FromStr};
 use bitcoin::Network;
+use postgres::{Client, NoTls};
 use crate::tasks::regtest_init::regtest_generate_to_address;
 mod tasks;
 
@@ -11,6 +12,9 @@ fn main() {
     const ARGUMENT_URL: &str = "--url=";
     const ARGUMENT_USER: &str = "--user=";
     const ARGUMENT_PASSWORD:&str = "--password=";
+
+    const NBXPLORER_POSTGRES_URL:&str=""; // format as username:password@hostname/database 
+
     let mut user = "";
     let mut url="localhost";
     let mut network =Network::Regtest; //default
@@ -33,14 +37,34 @@ fn main() {
          if arg.starts_with(ARGUMENT_PASSWORD) {
             password = arg.trim_start_matches(ARGUMENT_PASSWORD);
         }
+
+         if arg.starts_with(ARGUMENT_PASSWORD) {
+            password = arg.trim_start_matches(ARGUMENT_PASSWORD);
+        }
+ 
    }
 
     if network.eq(&Network::Regtest){
         println!("network: regtest");
         regtest_generate_to_address(&url, &user, &password)
     }
-    
-    // lnd_grpc_rust::LndClient{}
+
+
+      // Read the SQL file
+    let sql_content = fs::read_to_string("path/to/your/sql/file.sql")
+        .expect("Failed to read SQL file");
+
+    // Create a PostgreSQL connection
+    let mut client = Client::connect(&("postgresql://".to_owned()+NBXPLORER_POSTGRES_URL), NoTls)
+        .expect("Failed to connect to database");
+
+    // Execute the SQL query
+    match client.batch_execute(&sql_content) {
+        Ok(_) => println!("SQL file executed successfully"),
+        Err(e) => eprintln!("Failed to execute SQL file: {}", e),
+    }
 
     
 }
+
+    // https://lightning.engineering/api-docs/api/lnd/wallet-unlocker/init-wallet

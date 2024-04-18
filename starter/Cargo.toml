@@ -10,3 +10,4 @@ edition = "2021"
 bitcoin={ version = "0.31.2", features=["rand","std","rand-std"]}
 
 bitcoincore-rpc = "0.18.0"
+postgres = "0.19.7"

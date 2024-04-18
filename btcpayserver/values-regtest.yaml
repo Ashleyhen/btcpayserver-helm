@@ -84,6 +84,7 @@ nbxplorer:
     btcrpcurl=http://btcpayserver-bitcoin-core-0:43782
     btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
     btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
     rmquser="rabbituser"
     rmqpass=""
     rmqhost=nbxplorer-rabbitmq
