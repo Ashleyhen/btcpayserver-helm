@@ -104,8 +104,38 @@ or
 ```bash
 chromium-browser "http://$(kubectl get svc --namespace regtest | grep "23002" | awk '{print$3}'):23002/login"
 ```
-<!-- docker run -d -p 5000:5000 --restart=always --name registry registry:2 -->
+## Forwarding a port
 
-kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-lnd-internal 8080:8080
-kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-nbxplorer 32838:32838
-kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-postgresql 5432:5432
+kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver 23002:23002
+
+## Run the following script from inside btcpayserver to get started using regtest
+
+```bash
+  #!/bin/bash
+  apt update -y
+  apt upgrade -y
+  apt install curl -y
+  apt install jq -y  
+  export address='addr(bcrt1ppjj995khlhftanw7ak4zyzu3650rlmpfr9p4tafegw3u38h7vx4qnxemeg)'
+  export descriptor='addr(bcrt1ppjj995khlhftanw7ak4zyzu3650rlmpfr9p4tafegw3u38h7vx4qnxemeg)#hzc3j2sf'
+  export user=ceiwHEbqWI83 
+  export password=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+  export url=btcpayserver-bitcoin-core-0:43782
+
+  curl --user $user:$password \
+     --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"getdescriptorinfo\", \"params\": [\"$address\"]}" \
+     -H 'content-type: text/plain;' \
+     $url | jq
+
+  curl --user $user:$password --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"createwallet\", \"params\": [\"my_wallet\", true, false,\"\",false,true,true]}" -H 'content-type: text/plain;' $url | jq
+  curl --user $user:$password --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"importdescriptors\", \"params\": [[{\"desc\":\"$descriptor\",\"timestamp\":\"now\"}]]}" -H 'content-type: text/plain;' $url | jq
+  curl --user $user:$password --data-binary '{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"generatetodescriptor\", \"params\": '[50, $descriptor]'}'  -H 'content-type: text/plain;' $url  | jq
+
+  curl --user $user:$password \
+     --data-binary "{\"jsonrpc\": \"1.0\", \"id\": \"curltest\", \"method\": \"generatetodescriptor\", \"params\": [150, \"$descriptor\"]}" \
+     -H 'content-type: text/plain;' \
+     $url | jq
+
+
+
+```
