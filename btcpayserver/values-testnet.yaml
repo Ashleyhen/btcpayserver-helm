@@ -14,7 +14,6 @@ bitcoin-core:
   persistence:
     accessMode: ReadWriteOnce
     size: 64Gi
-    #
   config: |
     server=1
     testnet=1
@@ -136,6 +135,8 @@ env:
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
   BTCPAYGEN_LIGHTNING: 'lnd'
   BTCPAYGEN_ADDITIONAL_FRAGMENTS: "$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
+  BTCPAY_HttpsUseDefaultCertificate: "true"
+  BTCPAY_PORT: "23002"
 
 
 

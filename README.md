@@ -105,3 +105,7 @@ or
 chromium-browser "http://$(kubectl get svc --namespace regtest | grep "23002" | awk '{print$3}'):23002/login"
 ```
 <!-- docker run -d -p 5000:5000 --restart=always --name registry registry:2 -->
+
+kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-lnd-internal 8080:8080
+kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-nbxplorer 32838:32838
+kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port-forward service/btcpayserver-postgresql 5432:5432

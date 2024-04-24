@@ -118,7 +118,6 @@ postgresql:
   image:
     debug: true
 
-### btcpayserver section
 
 env:  
   BTCPAY_NETWORK: 'regtest'
@@ -130,7 +129,8 @@ env:
   BTCPAY_DEBUGLOG: "debug.log"
   ASPNETCORE_URLS: "http://*:23002"
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
-  
+  BTCPAY_HttpsUseDefaultCertificate: "true"
+  BTCPAY_PORT: "23002"
 initScript: | 
   #!/bin/bash
   apt update -y

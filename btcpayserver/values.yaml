@@ -47,6 +47,7 @@ securityContext: {}
 service:
   type: LoadBalancer
   port: 23002
+  
 
 ingress:
   enabled: false
