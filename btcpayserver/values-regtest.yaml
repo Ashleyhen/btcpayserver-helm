@@ -1,25 +1,20 @@
-env:  
-  BTCPAY_NETWORK: 'regtest'
-  BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
-  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
-  BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
-  BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
-  BTCPAY_VERBOSE: "true"
-  BTCPAY_DEBUGLOG: "debug.log"
-  ASPNETCORE_URLS: "http://*:23002"
-  BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
-  
 bitcoin-core:
   service:
     ports:
       rpc: 43782
       p2p: 39388
-      testnetPort: 28332
-      testnetP2pPort: 28333
+    extraPorts:
+      - name: zmqpubrawblock 
+        port: 28332
+        targetPort:  28332
+      - name: zmqpubrawtx
+        port: 28333
+        targetPort: 28333
+
   persistence:
     accessMode: ReadWriteOnce
     size: 1Gi
-    #
+
   config: |
     server=1
     txindex=1
@@ -27,6 +22,8 @@ bitcoin-core:
     rpcserialversion=0
     rpcuser=ceiwHEbqWI83
     rpcpassword=XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
+    whitelist=127.0.0.1
+    whitebind=0.0.0.0:39388
 
     [regtest]
     debug=rpc
@@ -41,6 +38,8 @@ bitcoin-core:
     deprecatedrpc=signrawtransaction
     fallbackfee=0.0002
     rpcport=43782
+    rpclisten=0.0.0.0:10009
+    restlisten=0.0.0.0:8080
 
 
 lnd:
@@ -51,7 +50,7 @@ lnd:
   configurationFile:
     lnd.conf: |-
       restlisten=0.0.0.0:8080
-      rpclisten=127.0.0.1:10008
+      rpclisten=127.0.0.1:10009
       bitcoin.node=bitcoind
       bitcoin.active=1
       bitcoin.regtest=1
@@ -64,11 +63,11 @@ lnd:
       debuglevel=debug
       trickledelay=1000
   internalServices:
-    rpc: 10009
-    rest: 8080
+    rpcPort: 10009
+    restPort: 8080
   # Ports that are visible outside your cluster
   externalServices:
-    p2p: 9735
+    p2pPort: 9735
   persistence:
     size: 1Gi
 
@@ -79,24 +78,26 @@ nbxplorer:
   persistence:
     size: 1Gi
   settingsConfig: |
-    bind=0.0.0.0:32838
-    network=regtest
-    chains=btc
-    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782
-    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
-    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-    rmquser="rabbituser"
-    rmqpass=""
-    rmqhost=nbxplorer-rabbitmq
+    bind=0.0.0.0:32838 
+    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388 
+    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4= 
+    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782 
+    chains=btc 
+    exposerpc=1
+    network=regtest 
+    noauth=true
+    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
+    rmqblockex=NetBlock 
+    rmqhost=nbxplorer-rabbitmq 
+    rmqpass="" 
+    rmqtranex=NewTransaction 
+    rmquser="rabbituser" 
     rmqvirtual=/
-    rmqtranex=NewTransaction
-    rmqblockex=NetBlock
-
 
 postgresql:
   auth:
-    username: "btcpayadmin"
-    password: "p@ssw0rd!"
+    username: btcpayadmin
+    password: p@ssw0rd!
   primary:
     initdb: 
       user: btcpayadmin
@@ -116,3 +117,17 @@ postgresql:
       size: 1Gi
   image:
     debug: true
+
+
+env:  
+  BTCPAY_NETWORK: 'regtest'
+  BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
+  BTCPAY_EXPLORERPOSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer"
+  BTCPAY_BTCEXPLORERURL: "http://btcpayserver-nbxplorer:32838"
+  BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=http://btcpayserver-lnd-internal:8080/;allowinsecure=true"
+  BTCPAY_VERBOSE: "true"
+  BTCPAY_DEBUGLOG: "debug.log"
+  ASPNETCORE_URLS: "http://*:23002"
+  BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
+  BTCPAY_HttpsUseDefaultCertificate: "true"
+  BTCPAY_PORT: "23002"

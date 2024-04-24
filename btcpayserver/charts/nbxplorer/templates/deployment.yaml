@@ -34,15 +34,19 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          args:
-            - "--datadir=/.nbxplorer"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          args: 
+            - --conf=/config/settings.config
+          
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: nbxplorer
-            mountPath: /data
+
           - name: settings-config
-            mountPath: .nbxplorer/Main/settings.config
-            subPath: settings.config
+            mountPath: /config
+            readOnly: false  # Set to false to allow write access
+
           # ports:
           #   - name: http
           #     containerPort: 80

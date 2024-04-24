@@ -1,2 +1,3 @@
 *.tgz
 btcpayserver/Chart.lock
+**/target
