@@ -35,62 +35,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           env:
-          - name: NBXPLORER_POSTGRES
-            value: User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
-          - name: NBXPLORER_EXPOSERPC
-            value: "1"
-          - name: NBXPLORER_BTCRPCURL
-            value: http://btcpayserver-bitcoin-core-0:43782
-          - name: "NBXPLORER_NOWARMUP"
-            value: "0"
-          # - name: NBXPLORER_NETWORK 
-          #   value: regtest
-          # - name: NBXPLORER_CHAINS 
-          #   value: "btc"
-          # - name: NBXPLORER_BTCNODEENDPOINT
-          #   value: btcpayserver-bitcoin-core-0:39388
-          # - name: NBXPLORER_BTCRPCUSER 
-          #   value: ceiwHEbqWI83
-          # - name: NBXPLORER_BTCRPCAUTH
-          #   value: ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-
-      #  NBXPLORER_BTCRPCPASSWORD: DwubwWsoo3
-      # NBXPLORER_BIND: 0.0.0.0:32838
-      # NBXPLORER_MINGAPSIZE: 5
-      # NBXPLORER_MAXGAPSIZE: 10
-      # NBXPLORER_VERBOSE: 1
-      # # NBXPLORER_POSTGRES: User ID=postgres;Include Error Detail=true;Host=postgres;Port=5432;Database=nbxplorer
-      # NBXPLORER_EXPOSERPC: 1
-      # NBXPLORER_NOAUTH: 1
-            # - --postgres=User ID=btcpayadmin;Password=p@ssw0rd;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
           args: 
-            - --network=regtest 
-            - --bind=0.0.0.0:32838 
-            - --chains=btc 
-            - --btcrpcurl=http://btcpayserver-bitcoin-core-0:43782 
-            - --btcnodeendpoint=btcpayserver-bitcoin-core-0:39388 
-            - --btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4= 
-            - --rmquser="rabbituser" 
-            - --rmqpass="" 
-            - --rmqhost=nbxplorer-rabbitmq 
-            - --rmqvirtual=/ 
-            - --rmqtranex=NewTransaction 
-            - --rmqblockex=NetBlock 
-            - --noauth=true
-            # - --datadir=/datadir/Regtest/settings.config
+            - --conf=/config/settings.config
           
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          - name: nbxplorer
-            mountPath: /data
-            readOnly: false  # Set to false to allow write access
 
           - name: settings-config
-            mountPath: /datadir/Main
+            mountPath: /config
             readOnly: false  # Set to false to allow write access
-            # subPath: settings.config
+
           # ports:
           #   - name: http
           #     containerPort: 80

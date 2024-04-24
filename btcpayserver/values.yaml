@@ -8,7 +8,7 @@ image:
   repository: btcpayserver/btcpayserver
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.12.4"
+  tag: "1.13.1"
 
 imagePullSecrets: []
 nameOverride: ""

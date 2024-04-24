@@ -81,21 +81,23 @@ nbxplorer:
   persistence:
     size: 8Gi
   settingsConfig: |
-    bind=0.0.0.0:32838
-    network=testnet
-    chains=btc
-    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782
-    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
-    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-    rmquser="rabbituser"
-    verbose=1
-    rmqpass=""
-    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=postgres;Port=5432;Database=nbxplorer
-    rmqhost=nbxplorer-rabbitmq
-    rmqvirtual=/
-    rmqtranex=NewTransaction
-    rmqblockex=NetBlock
+    bind=0.0.0.0:32838 
+    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388 
+    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4= 
+    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782 
+    chains=btc 
+    exposerpc=1
+    network=testnet 
     noauth=true
+    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
+    rmqblockex=NetBlock 
+    rmqhost=nbxplorer-rabbitmq 
+    rmqpass="" 
+    rmqtranex=NewTransaction 
+    rmquser="rabbituser" 
+    rmqvirtual=/
+    verbose=1
+    btcrescan=1
 
 
 postgresql:

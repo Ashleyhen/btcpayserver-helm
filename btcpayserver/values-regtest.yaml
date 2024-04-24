@@ -78,20 +78,21 @@ nbxplorer:
   persistence:
     size: 1Gi
   settingsConfig: |
-    bind=0.0.0.0:32838
-    network=regtest
-    chains=btc
-    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782
-    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388
-    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4=
-    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
-    rmquser="rabbituser"
-    rmqpass=""
-    rmqhost=nbxplorer-rabbitmq
-    rmqvirtual=/
-    rmqtranex=NewTransaction
-    rmqblockex=NetBlock
+    bind=0.0.0.0:32838 
+    btcnodeendpoint=btcpayserver-bitcoin-core-0:39388 
+    btcrpcauth=ceiwHEbqWI83:XB62kURh0JUTOhIpC-WV7X6m4jGuVvwsyQV4m_EP9C4= 
+    btcrpcurl=http://btcpayserver-bitcoin-core-0:43782 
+    chains=btc 
+    exposerpc=1
+    network=regtest 
     noauth=true
+    postgres=User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=nbxplorer
+    rmqblockex=NetBlock 
+    rmqhost=nbxplorer-rabbitmq 
+    rmqpass="" 
+    rmqtranex=NewTransaction 
+    rmquser="rabbituser" 
+    rmqvirtual=/
 
 postgresql:
   auth:
@@ -157,4 +158,3 @@ initScript: |
      $url | jq
 
 
-  
