@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "{{ include "btcpayserver.fullname" .}}-plugins"
+  name: {{.Values.pvc.name}}
   annotations:
     "helm.sh/resource-policy": keep
   labels:
@@ -9,7 +9,6 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: standard
   resources:
     requests:
       storage: 2Gi

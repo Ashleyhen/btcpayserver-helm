@@ -131,3 +131,8 @@ env:
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
   BTCPAY_HttpsUseDefaultCertificate: "true"
   BTCPAY_PORT: "23002"
+
+
+pvc:
+  name: btcpayserver-plugin
+  storage: 2Gi

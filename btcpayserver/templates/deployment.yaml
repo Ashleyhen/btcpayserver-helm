@@ -67,12 +67,12 @@ spec:
             initialDelaySeconds: 120  
             periodSeconds: 30        
           volumeMounts:
-          - name: "{{ include "btcpayserver.fullname" .}}-plugins" 
+          - name: {{.Values.pvc.name}} 
             mountPath:  /root/.btcpayserver/Plugins
       volumes:
-        - name: "{{ include "btcpayserver.fullname" .}}-plugins"
+        - name: {{ .Values.pvc.name }}
           persistentVolumeClaim:
-            claimName: "{{ include "btcpayserver.fullname" .}}-plugins"
+            claimName: {{ .Values.pvc.name }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

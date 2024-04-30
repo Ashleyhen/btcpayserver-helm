@@ -140,4 +140,7 @@ env:
 
 
 
+pvc:
+  name: btcpayserver-plugin
+  storage: 2Gi
 
