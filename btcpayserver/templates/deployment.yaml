@@ -59,20 +59,21 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           livenessProbe:
             httpGet:
-              path: /  
-              port: 23002      
+              path: https://localhost:23002  
+              port: 23002
+              scheme: HTTPS      
             initialDelaySeconds: 120  
             periodSeconds: 30        
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
+          - name: {{.Values.pvc.name}} 
+            mountPath:  /root/.btcpayserver/Plugins
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Values.pvc.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
