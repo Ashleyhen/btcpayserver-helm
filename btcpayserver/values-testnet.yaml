@@ -123,6 +123,43 @@ postgresql:
   image:
     debug: true
 
+rtl:
+  configMap:
+    jsonContent: |
+      {
+        "port": "3000",
+        "defaultNodeIndex": 1,
+        "dbDirectoryPath": "/root/database/node-1",
+        "SSO": {
+          "rtlSSO": 0,
+          "rtlCookiePath": "",
+          "logoutRedirectLink": ""
+        },
+        "nodes": [
+          {
+            "index": 1,
+            "lnNode": "Node 1",
+            "lnImplementation": "LND",
+            "Authentication": {
+              "macaroonPath": "/RTL/data/chain/bitcoin/testnet",
+              "configPath": "/RTL/data/lnd.conf"
+            },
+            "Settings": {
+              "userPersona": "MERCHANT",
+              "themeMode": "DAY",
+              "themeColor": "PURPLE",
+              "channelBackupPath": "/root/backup/node-1",
+              "logLevel": "ERROR",
+              "lnServerUrl": "https://btcpayserver-lnd-internal:8080",
+              "fiatConversion": false,
+              "unannouncedChannels": false
+            }
+          }
+        ],
+        "multiPassHashed": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+      }
+
+
 env:  
   BTCPAY_NETWORK: 'testnet'
   BTCPAY_POSTGRES: "User ID=btcpayadmin;Password=p@ssw0rd!;Include Error Detail=true;Host=btcpayserver-postgresql;Port=5432;Database=btcpayserver"
@@ -138,9 +175,6 @@ env:
   BTCPAY_HttpsUseDefaultCertificate: "true"
   BTCPAY_PORT: "23002"
 
-
-
 pvc:
   name: btcpayserver-plugin
   storage: 2Gi
-
