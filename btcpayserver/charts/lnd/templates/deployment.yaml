@@ -48,7 +48,7 @@ spec:
               containerPort: {{ .Values.externalServices.p2pPort }}
           volumeMounts:
             - name: data
-              mountPath: /root/
+              mountPath: /root/.lnd/data
             {{- if .Values.configurationFile }}
             - name: config
               mountPath: /root/.lnd/lnd.conf

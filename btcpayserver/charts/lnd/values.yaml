@@ -18,6 +18,8 @@ externalServices:
 
 persistence:
   enabled: true
+  size: 1Gi
+
   ## database data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -26,7 +28,7 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
-  accessMode: ReadWriteOnce
+  accessMode: ReadWriteMany
   size: 5Gi
 
 ## Configure resource requests and limits

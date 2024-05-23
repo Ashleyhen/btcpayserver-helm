@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rtl.fullname" . }}
+data:
+  RTL-Config.json: |
+{{ .Values.configMap.jsonContent | nindent 4 }}
