@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "btcpayserver.fullname" . }}
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 1asdfah@gmail.com
+    privateKeySecretRef:
+      name: {{.Values.ingress.service.cert}}
+    solvers:
+        - http01:
+            ingress:
+                class: nginx

@@ -46,7 +46,8 @@ securityContext: {}
 
 service:
   type: LoadBalancer
-  port: 23002
+  port: 80
+  targetPort: 80
 
 
 ingress:
@@ -108,3 +109,10 @@ volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+ingress:
+  name: btcpayserver-ingress
+  host: satsvertising.btcpaytestnet
+  service:
+    port: 23002
+    name: btcpayserver

@@ -59,13 +59,13 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          livenessProbe:
-            httpGet:
-              path: https://localhost:23002  
-              port: 23002
-              scheme: HTTPS      
-            initialDelaySeconds: 120  
-            periodSeconds: 30        
+          # livenessProbe:
+          #   httpGet:
+          #     path: http://localhost:23002  
+          #     port: 23002
+              # scheme: HTTPS      
+            # initialDelaySeconds: 120  
+            # periodSeconds: 30        
           volumeMounts:
           - name: {{.Values.pvc.name}} 
             mountPath:  /root/.btcpayserver/Plugins

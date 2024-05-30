@@ -173,3 +173,10 @@ pvc:
   name: btcpayserver-plugin
   storage: 2Gi
 
+
+ingress:
+  name: btcpayserver-ingress
+  host: testnet.satsvertising.io
+  service:
+    port: 23002
+    name: btcpayserver

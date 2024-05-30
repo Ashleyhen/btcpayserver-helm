@@ -139,3 +139,18 @@ kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --namespace=testnet port
 
 
 ```
+
+
+
+ https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.crds.yaml
+ <!-- kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.8.0/cert-manager.crds.yaml -->
+
+ https://artifacthub.io/packages/helm/cert-manager/cert-manager
+
+ https://157.230.200.51:443/login?ReturnUrl=%2Fstores%2F
+
+
+  kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml --validate=false  apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.0-beta.2/cert-manager.yaml
+
+   kubectl --kubeconfig=../k8-btcpayserver-kubeconfig.yaml -n testnet  apply -f https://raw.githubusercontent.com/nginxinc/kubernetes-ingress/v3.5.1/deploy/crds.yaml
+
