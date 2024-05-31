@@ -47,4 +47,4 @@ dependencies:
     
   - name: nginx-ingress
     version: 1.2.1
-    repository: oci://ghcr.io/nginxinc/charts"
+    repository: oci://ghcr.io/nginxinc/charts

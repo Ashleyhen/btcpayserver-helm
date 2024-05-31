@@ -184,14 +184,15 @@ pvc:
   storage: 2Gi
 
 ingress:
-  host: testnet.btcpaytestnet.satsvertising.com
+  host: testnet.spos.live
   service:
     port: 80
-    name: btcpayserver
-    cert: testnet-btcpaytestnet-satsvertising.cert
+    name: btcpayserver-rtl
+    cert: btcpayserver
 
 service:
   type: LoadBalancer
   port: 443
   targetPort: 23002
+  
 

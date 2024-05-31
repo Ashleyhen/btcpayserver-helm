@@ -5,6 +5,8 @@ metadata:
   annotations:
     cert-manager.io/issuer: {{ include "btcpayserver.fullname" . }}
     cert-manager.io/acme-challenge-type: http01
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  # Only if BTCPay Server supports HTTPS directly
 
 spec:
   tls:
@@ -23,6 +25,7 @@ spec:
                 name: {{.Values.ingress.service.name}}
                 port:
                   number: {{.Values.ingress.service.port}}
+                  
   ingressClassName: nginx
           # - path: /.well-known/acme-challenge/
           #   pathType: Prefix
