@@ -1,10 +1,10 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ include "btcpayserver.fullname" . }}
+  name: {{ include "btcpayserver.fullname" . }}-issuer
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: 1asdfah@gmail.com
     privateKeySecretRef:
       name: {{.Values.ingress.service.cert}}
