@@ -4,18 +4,20 @@ metadata:
   name: {{ include "btcpayserver.fullname" . }}-ingress
   annotations:
     cert-manager.io/acme-challenge-type: http01
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      # Dedicated location for ACME challenges
-      location /.well-known/acme-challenge/* {
-          default_type text/plain;
-          return 200 http://$host$request_uri;
-      }
+    nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0,::/0
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   # Dedicated location for ACME challenges
+    #   location /.well-known/acme-challenge/ {
+    #       default_type text/plain;
+    #       return 200 http://$host$request_uri;
+    #   }
 spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host }}
-      secretName: {{ .Values.ingress.service.cert }}
+      secretName: btcpayserver-tls
+
   ingressClassName: nginx
   rules:
     - host: {{ .Values.ingress.host }}
@@ -29,11 +31,10 @@ spec:
                 port:
                   number: {{ .Values.ingress.service.port }}
 
-
-          # - path: /.well-known/acme-challenge/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: {{.Values.ingress.service.name}}
-          #       port:
-          #         number: {{.Values.ingress.service.port}}
+          - path: /.well-known/acme-challenge/
+            pathType: Prefix
+            backend:
+              service:
+                name: cm-acme-http-solver
+                port:
+                  number: 8089

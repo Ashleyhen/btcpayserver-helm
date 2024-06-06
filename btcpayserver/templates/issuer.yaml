@@ -7,7 +7,7 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: 1asdfah@gmail.com
     privateKeySecretRef:
-      name: {{.Values.ingress.service.cert}}
+      name: btcpayserver-issuer-key
     solvers:
         - http01:
             ingress:
