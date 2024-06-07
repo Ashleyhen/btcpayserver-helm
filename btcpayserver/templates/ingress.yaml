@@ -5,13 +5,8 @@ metadata:
   annotations:
     cert-manager.io/acme-challenge-type: http01
     nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0,::/0
-    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/configuration-snippet: |
-    #   # Dedicated location for ACME challenges
-    #   location /.well-known/acme-challenge/ {
-    #       default_type text/plain;
-    #       return 200 http://$host$request_uri;
-    #   }
+    cert-manager.io/issuer: {{ include "btcpayserver.fullname" . }}-issuer
+    
 spec:
   tls:
     - hosts:
