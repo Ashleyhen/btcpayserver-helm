@@ -36,20 +36,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - "/bin/bash"
-            - "-c"
-            - |
-              apt update -y && \
-              apt upgrade -y && \
-              apt install -y wget && \
-              wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-              dpkg -i packages-microsoft-prod.deb && \
-              apt-get update -y && \
-              apt-get install -y dotnet-sdk-8.0 && \
-              dotnet dev-certs https --trust && \
-              ./BTCPayServer
-
           envFrom:
           - configMapRef:
               name: {{ template "btcpayserver.fullname" . }}
@@ -61,9 +47,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: https://localhost:23002  
+              path: http://localhost:23002  
               port: 23002
-              scheme: HTTPS      
+              scheme: HTTP      
             initialDelaySeconds: 120  
             periodSeconds: 30        
           volumeMounts:

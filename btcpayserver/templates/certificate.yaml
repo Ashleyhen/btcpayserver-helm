@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "btcpayserver.fullname" . }}-cert
+  namespace: testnet
+spec:
+  secretName: btcpayserver-tls
+  dnsNames:
+  - {{ .Values.ingress.host }}
+  issuerRef:
+    name: {{ include "btcpayserver.fullname" . }}-issuer
+    kind: Issuer

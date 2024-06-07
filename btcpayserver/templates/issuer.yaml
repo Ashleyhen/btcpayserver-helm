@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "btcpayserver.fullname" . }}-issuer
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 1asdfah@gmail.com
+    privateKeySecretRef:
+      name: btcpayserver-issuer-key
+    solvers:
+        - http01:
+            ingress:
+                class: nginx

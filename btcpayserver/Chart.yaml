@@ -25,23 +25,26 @@ appVersion: "1.16.0"
 
 dependencies:
 
-- name: lnd 
-  version: 0.3.15
-  repository: file://charts/lnd
-  
-- name: postgresql 
-  version: 13.4.3
-  repository: https://charts.bitnami.com/bitnami
+  - name: lnd 
+    version: 0.3.15
+    repository: file://charts/lnd
+    
+  - name: postgresql 
+    version: 13.4.3
+    repository: https://charts.bitnami.com/bitnami
 
-- name: nbxplorer 
-  version: 0.1.5
-  repository:  file://charts/nbxplorer
+  - name: nbxplorer 
+    version: 0.1.5
+    repository:  file://charts/nbxplorer
 
-- name: bitcoin-core 
-  version: 2.0.2
-  repository:  https://charts.hiro.so/hirosystems
+  - name: bitcoin-core 
+    version: 2.0.2
+    repository:  https://charts.hiro.so/hirosystems
 
-- name: rtl 
-  version: 0.1.0
-  repository:  file://charts/rtl
-  
+  - name: rtl 
+    version: 0.1.0
+    repository:  file://charts/rtl
+    
+  - name: nginx-ingress
+    version: 1.2.1
+    repository: oci://ghcr.io/nginxinc/charts
