@@ -176,8 +176,8 @@ env:
   BTCPAY_ALLOW-ADMIN-REGISTRATION: "true"
   BTCPAYGEN_LIGHTNING: 'lnd'
   BTCPAYGEN_ADDITIONAL_FRAGMENTS: "$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
-  BTCPAY_HttpsUseDefaultCertificate: "true"
   BTCPAY_PORT: "23002"
+  BTCPAY_BIND: 0.0.0.0:23002
 
 pvc:
   name: btcpayserver-plugin
@@ -187,12 +187,12 @@ ingress:
   host: testnet.spos.live
   service:
     port: 80
-    name: btcpayserver-rtl
-    cert: btcpayserver
+    name: btcpayserver
+    cert: btcpayserver-cert
 
 service:
   type: LoadBalancer
-  port: 443
+  port: 80
   targetPort: 23002
   
 
