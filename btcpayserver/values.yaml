@@ -110,9 +110,5 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-ingress:
-  name: btcpayserver-ingress
-  host: satsvertising.btcpaytestnet
-  service:
-    port: 23002
-    name: btcpayserver
+ingress: {}
+  

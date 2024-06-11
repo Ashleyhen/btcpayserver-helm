@@ -173,12 +173,6 @@ pvc:
   name: btcpayserver-plugin
   storage: 2Gi
 
-ingress:
-  host: testnet.spos.live
-  service:
-    port: 80
-    name: btcpayserver
-    cert: btcpayserver-cert
 
 service:
   type: LoadBalancer
