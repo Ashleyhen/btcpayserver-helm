@@ -8,8 +8,8 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: trans-http
+      targetPort: http
       protocol: TCP
-      name: trans-http
+      name: http
   selector:
     {{- include "btctransmuter.selectorLabels" . | nindent 4 }}

@@ -46,11 +46,20 @@ spec:
           # command: ["/bin/sh"]
           # args: ["-c", "ls /app/Extensions -a"]
           ports:
-            - name: trans-http
+            - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+          livenessProbe:
+            httpGet:
+              path: /  
+              port: 80
+              scheme: HTTP      
+            initialDelaySeconds: 120  
+            periodSeconds: 30        
+
           volumeMounts:
             - name: {{.Values.pvc.name}} 
               mountPath: /app/Extensions 
