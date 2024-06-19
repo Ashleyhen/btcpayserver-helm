@@ -31,7 +31,7 @@ spec:
       initContainers:
         - name: init-remove-lost-found
           image: busybox
-          command: ["sh", "-c", "rm -rf /app/Extensions/lost+found"]
+          command: ["sh", "-c", "if [ -d /app/Extensions/lost+found ]; then rm -rf /app/Extensions/lost+found; fi"]
           volumeMounts:
             - name: {{ .Values.pvc.name }}
               mountPath: /app/Extensions
