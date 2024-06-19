@@ -47,7 +47,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: http://localhost:23002  
+              path: /  
               port: 23002
               scheme: HTTP      
             initialDelaySeconds: 120  
