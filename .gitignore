@@ -1,3 +1,4 @@
 *.tgz
 btcpayserver/Chart.lock
 **/target
+kubeconfig.yaml
