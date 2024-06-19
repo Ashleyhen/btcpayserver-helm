@@ -28,6 +28,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "btctransmuter.serviceAccountName" . }}
+      initContainers:
+        - name: init-remove-lost-found
+          image: busybox
+          command: ["sh", "-c", "rm -rf /app/Extensions/lost+found"]
+          volumeMounts:
+            - name: {{ .Values.pvc.name }}
+              mountPath: /app/Extensions
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,24 +43,22 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: ["/bin/sh"]
+          # args: ["-c", "ls /app/Extensions -a"]
           ports:
-            - name: http
+            - name: trans-http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      #     volumeMounts:
-      #       - name: {{.Values.pvc.name}} 
-      #         mountPath: /app/Extensions 
+          volumeMounts:
+            - name: {{.Values.pvc.name}} 
+              mountPath: /app/Extensions 
 
-      # volumes:
-      #  - name: {{ .Values.pvc.name }}
-      #    persistentVolumeClaim:
-      #       claimName: {{ .Values.pvc.name }}
+      volumes:
+       - name: {{ .Values.pvc.name }}
+         persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
 
 
       {{- with .Values.nodeSelector }}

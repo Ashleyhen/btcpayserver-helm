@@ -124,10 +124,6 @@ postgresql:
     debug: true
 
 rtl:
-  service:
-    port: 80
-    targetPort: 3000
-
   configMap:
     jsonContent: |
       {
@@ -163,10 +159,6 @@ rtl:
         "multiPassHashed": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
       }
 
-btctransmuter:
-  pvc:
-    name: btc-transmuter-plugin
-    size: 2Gi
 
 env:  
   BTCPAY_NETWORK: 'testnet'
@@ -182,12 +174,13 @@ env:
   BTCPAYGEN_ADDITIONAL_FRAGMENTS: "$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
   BTCPAY_PORT: "23002"
   BTCPAY_BIND: 0.0.0.0:23002
+  BTCPAYGEN_ADDITIONAL_FRAGMENTS: $BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter
 
 pvc:
   name: btcpayserver-plugin
   storage: 2Gi
 
-ingress:
+ingress: 
   issuer:
     email: 1asdfah@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
