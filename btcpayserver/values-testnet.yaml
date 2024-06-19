@@ -124,6 +124,9 @@ postgresql:
     debug: true
 
 rtl:
+  service:
+    port: 80
+    targetPort: 3000
   configMap:
     jsonContent: |
       {
