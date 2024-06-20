@@ -32,14 +32,6 @@ spec:
                 port:
                   number: {{ .Values.ingress.btcpay.service.port }}
 
-          - path: /btctransmuter/
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ .Values.ingress.btctransmuter.service.name }}
-                port:
-                  number: {{ .Values.ingress.btctransmuter.service.port }}
-
     - host: {{ .Values.ingress.rtl.host }}
       http:
         paths:

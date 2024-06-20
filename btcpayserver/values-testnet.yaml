@@ -200,10 +200,6 @@ ingress:
       port: 80
       name: btcpayserver-rtl
 
-  btctransmuter:
-    service: 
-      port: 80
-      name: btcpayserver-btctransmuter
 
 service:
   type: LoadBalancer
