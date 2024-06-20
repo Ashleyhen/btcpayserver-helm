@@ -127,7 +127,6 @@ rtl:
   service:
     port: 80
     targetPort: 3000
-
   configMap:
     jsonContent: |
       {
@@ -178,12 +177,13 @@ env:
   BTCPAYGEN_ADDITIONAL_FRAGMENTS: "$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter"
   BTCPAY_PORT: "23002"
   BTCPAY_BIND: 0.0.0.0:23002
+  BTCPAYGEN_ADDITIONAL_FRAGMENTS: $BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-btctransmuter
 
 pvc:
   name: btcpayserver-plugin
   storage: 2Gi
 
-ingress:
+ingress: 
   issuer:
     email: 1asdfah@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -193,6 +193,7 @@ ingress:
     service:
       port: 80
       name: btcpayserver
+
   rtl:
     host: rtl.spos.live
     service:

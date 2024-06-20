@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "btctransmuter.fullname" . }}
+  labels:
+    {{- include "btctransmuter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "btctransmuter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "btctransmuter.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "btctransmuter.serviceAccountName" . }}
+      initContainers:
+        - name: init-remove-lost-found
+          image: busybox
+          command: ["sh", "-c", "if [ -d /app/Extensions/lost+found ]; then rm -rf /app/Extensions/lost+found; fi"]
+          volumeMounts:
+            - name: {{ .Values.pvc.name }}
+              mountPath: /app/Extensions
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: ["/bin/sh"]
+          # args: ["-c", "ls /app/Extensions -a"]
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          livenessProbe:
+            httpGet:
+              path: /  
+              port: 80
+              scheme: HTTP      
+            initialDelaySeconds: 120  
+            periodSeconds: 30        
+
+          volumeMounts:
+            - name: {{.Values.pvc.name}} 
+              mountPath: /app/Extensions 
+
+      volumes:
+       - name: {{ .Values.pvc.name }}
+         persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
+
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

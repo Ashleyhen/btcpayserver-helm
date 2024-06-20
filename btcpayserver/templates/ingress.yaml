@@ -9,6 +9,7 @@ metadata:
     cert-manager.io/issuer: {{ include "btcpayserver.fullname" . }}-issuer
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0,::/0
 
 spec:
@@ -24,13 +25,12 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ .Values.ingress.btcpay.service.name }}
                 port:
                   number: {{ .Values.ingress.btcpay.service.port }}
-          
 
     - host: {{ .Values.ingress.rtl.host }}
       http:
