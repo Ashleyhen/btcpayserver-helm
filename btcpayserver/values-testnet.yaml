@@ -200,7 +200,6 @@ ingress:
       port: 80
       name: btcpayserver-rtl
 
-
 service:
   type: LoadBalancer
   port: 80
